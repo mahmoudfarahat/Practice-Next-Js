@@ -1,7 +1,8 @@
 'use server'
  
 import  {db } from '@/db';
-import { error } from 'console';
+ 
+import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 
 export async function editSnippet(id:number , code:string) {
@@ -21,6 +22,7 @@ export async function editSnippet(id:number , code:string) {
     await db.snippet.delete({
         where :{id}
     })
+    revalidatePath('/')
     redirect(`/`)
 
  }
@@ -64,5 +66,7 @@ if(typeof code !== 'string' || code.length <3 )
             }
         }
    }    
-   redirect('/')
+ 
+   revalidatePath('/')
+     redirect('/')
 }
